@@ -8,4 +8,9 @@
 * [Tech Stack](#tech-stack)
 
 
-##Tech Stack
+## Tech Stack
+- Python
+- Pandas
+- Django
+- HTML
+- CSS
