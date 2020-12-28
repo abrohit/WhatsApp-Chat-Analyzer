@@ -9,11 +9,11 @@ class ExtractData:
     def __init__(self, file_path):
         self.path = file_path
         self.data = []
-    
+
     def load_file(self):
         file = open(self.path, 'r', encoding='utf-8')
         return file
-    
+
     def Is_NewEntry(self, line: str) -> bool:
         date_time = '([0-9]+)(\/)([0-9]+)(\/)([0-9]+), ([0-9]+):([0-9]+)[ ]?(AM|PM|am|pm)? -'
         test = re.match(date_time, line)
@@ -33,14 +33,14 @@ class ExtractData:
             return (date, time, author, message)
         else:
             return None
-    
+
     def Emojis_Check(self, message: str)-> list:
 
         final = []
         for char in message:
             if char in emoji.UNICODE_EMOJI:
                 final.append(char)
-        
+
         if len(final) == 0:
             return 0
         else:
@@ -60,14 +60,14 @@ class ExtractData:
             line = file.readline()
             if not line:
                 break #Stops the while loop at the end of file
-            
+
             if self.Is_NewEntry(line):
 
                 if len(full_message)>0:
                     temp = ' '.join(full_message)
                     modified_replaced = temp.replace('\n', ' ')
                     self.data.append([date, time, author, modified_replaced])
-                
+
                 full_message.clear()
                 received = self.Seperate_Data(line)
                 if received is not None:
@@ -77,7 +77,7 @@ class ExtractData:
                 full_message.append(line)
 
         file.close()
-    
+
     def Change_Dataframe(self) -> object:
 
         df = pd.DataFrame(self.data, columns=['Date', 'Time', 'Author', 'Message'])
@@ -91,16 +91,16 @@ class StatGenerator:
 
     def __init__(self, dataframe):
         self.df = dataframe
-    
+
     def ActivityOverDates(self):
         result = self.df.groupby('Date').sum()
         result = result.rename(columns={'Emoji_num': 'Number of Messages'})
         return result
-    
+
     def MostUsedWords(self, number: int):
         result = Counter(" ".join(self.df['Message']).split()).most_common(number)
         return result
-    
+
     def MostActive(self, number: int):
         result = pd.DataFrame(self.df.Author.value_counts())
 
@@ -108,7 +108,7 @@ class StatGenerator:
             return result
         else:
             return result[:number]
-    
+
     def NightOwls(self, number: int):
         temp = pd.to_datetime(self.df.Time)
         night_mask = ((temp.dt.hour >= 3) & (temp.dt.hour <=23))#Between 11pm and 3am
@@ -118,8 +118,8 @@ class StatGenerator:
             return result
         else:
             return result[:number]
-    
-    def EarlyBirds(self):
+            
+    def EarlyBirds(self, number: int):
         temp = pd.to_datetime(self.df.Time)
         morning_mask = (temp.dt.hour >= 6) & (temp.dt.hour <=9)#between 6am and 9am
         result = pd.DataFrame(self.df[morning_mask].Author.value_counts())
@@ -128,17 +128,17 @@ class StatGenerator:
             return result
         else:
             return result[:number]
-    
+
     def EmojiSpammers(self):
         result = pd.DataFrame(self.df.groupby('Author').Emoji_num.sum().sort_values(ascending=False))
         return result
-    
+
     def TotalEmojis(self):
         return len([i for j in self.df.Emojis[self.df.Emojis!=0] for i in j])
-    
+
     def UniqueEmojis(self):
         return len(set([i for j in self.df.Emojis[self.df.Emojis!=0] for i in j]))
-    
+
     def FrequentEmojis(self, number: int):
         emojiList = [i for j in self.df.Emojis[self.df.Emojis!=0] for i in j]
         emoji_dict = dict(Counter(emojiList))
@@ -159,8 +159,8 @@ def main():
     yes = ExtractData(file_store)
     yes.Main_Process()
     df = yes.Change_Dataframe()
-    
+
     stat = StatGenerator(df)
-    print(stat.FrequentEmojis(5))
+    print(stat.MostActive(5))
 
 main()
