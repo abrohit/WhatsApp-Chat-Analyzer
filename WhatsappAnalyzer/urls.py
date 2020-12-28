@@ -20,4 +20,5 @@ from MainPage import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.Home, name='Home'),
+    path('analyze/', views.Analyze, name='Analyze'),
 ]
