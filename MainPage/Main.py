@@ -4,6 +4,11 @@ import emoji
 from collections import Counter
 import datetime
 
+import plotly
+import plotly.express as px
+from plotly.offline import plot
+import plotly.graph_objects as go
+
 class ExtractData:
 
     def __init__(self, file_path):
@@ -95,43 +100,68 @@ class StatGenerator:
     def ActivityOverDates(self):
         result = self.df.groupby('Date').sum()
         result = result.rename(columns={'Emoji_num': 'Number of Messages'})
-        return result
+
+        figure = px.line(result, x=result.index, y=result['Number of Messages'].values, labels={'y':'Number of Messages'})
+        graph = plot(figure, output_type='div')
+        return graph
 
     def MostUsedWords(self, number: int):
         result = Counter(" ".join(self.df['Message']).split()).most_common(number)
-        return result
+        obj = pd.DataFrame(result, columns =['Word', 'Frequency'])
+
+        labels = obj['Word'].values
+        values = obj['Frequency'].values
+        figure = go.Figure(data=[go.Pie(labels=labels, values=values, hole=0.3)])
+        graph = plot(figure, output_type='div')
+        return graph
 
     def MostActive(self, number: int):
         result = pd.DataFrame(self.df.Author.value_counts())
+        result = result.rename(columns={'Author': 'Message Count'})
 
-        if result.shape[0] < number:
-            return result
-        else:
-            return result[:number]
+        if result.shape[0] > number:
+            result = result[:number]
+
+        figure = px.bar(result, x=result.index, y=result['Message Count'].values, labels={'y':'Number of Messages'})
+        graph = plot(figure, output_type='div')
+        return graph
+
 
     def NightOwls(self, number: int):
         temp = pd.to_datetime(self.df.Time)
         night_mask = ((temp.dt.hour >= 3) & (temp.dt.hour <=23))#Between 11pm and 3am
         result = pd.DataFrame(self.df[night_mask].Author.value_counts())
+        result = result.rename(columns={'Author':'Message Count'})
 
-        if result.shape[0] < number:
-            return result
-        else:
-            return result[:number]
+        if result.shape[0] > number:
+            result = result[:number]
+        
+        figure = px.bar(result, x=result.index, y=result['Message Count'].values, labels={'y':'Number of Messages'})
+        graph = plot(figure, output_type='div')
+        return graph
             
     def EarlyBirds(self, number: int):
         temp = pd.to_datetime(self.df.Time)
         morning_mask = (temp.dt.hour >= 6) & (temp.dt.hour <=9)#between 6am and 9am
         result = pd.DataFrame(self.df[morning_mask].Author.value_counts())
+        result = result.rename(columns={'Author':'Message Count'})
 
-        if result.shape[0] < number:
-            return result
-        else:
-            return result[:number]
+        if result.shape[0] > number:
+            result = result[:number]
+        
+        figure = px.bar(result, x=result.index, y=result['Message Count'].values, labels={'y':'Number of Messages'})
+        graph = plot(figure, output_type='div')
+        return graph
 
-    def EmojiSpammers(self):
+    def EmojiSpammers(self, number: int):
         result = pd.DataFrame(self.df.groupby('Author').Emoji_num.sum().sort_values(ascending=False))
-        return result
+
+        if result.shape[0] > number:
+            result = result[:number]
+        
+        figure = px.bar(result, x=result.index, y=result['Emoji_num'].values, labels={'y':'Number of Emojis'})
+        graph = plot(figure, output_type='div')
+        return graph
 
     def TotalEmojis(self):
         return len([i for j in self.df.Emojis[self.df.Emojis!=0] for i in j])
@@ -143,14 +173,16 @@ class StatGenerator:
         emojiList = [i for j in self.df.Emojis[self.df.Emojis!=0] for i in j]
         emoji_dict = dict(Counter(emojiList))
         emoji_dict = sorted(emoji_dict.items(), key=lambda x: x[1], reverse=True)
-        result = pd.DataFrame(emoji_dict, columns=['Emoji', 'Count'])
+        result = pd.DataFrame(emoji_dict, columns=['Emoji', 'Frequency'])
 
-        if result.shape[0] < number:
-            return result
-        else:
-            return result[:number]
-
-
+        if result.shape[0] > number:
+            result = result[:number]
+        
+        labels = result.Emoji.values
+        values = result.Frequency.values
+        figure = go.Figure(data=[go.Pie(labels=labels, values=values)])
+        graph = plot(figure, output_type='div')
+        return graph
 
 def main():
 
@@ -161,6 +193,6 @@ def main():
     df = yes.Change_Dataframe()
 
     stat = StatGenerator(df)
-    print(stat.MostActive(5))
+    print(stat.EmojiSpammers(5))
 
-main()
+#main()

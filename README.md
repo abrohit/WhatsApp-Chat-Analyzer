@@ -10,6 +10,7 @@
 
 ## Tech Stack
 - Python
+- Plotly
 - Pandas
 - Django
 - HTML

@@ -15,3 +15,78 @@
 
     <title>Whatsapp Chat Analyzer</title>
   </head>
+
+  <body>
+
+    <br><br>
+
+    <h1 class="title is-1 has-text-centered has-text-primary">WhatsApp Analysis of {{ Name }}</h1>
+    <h2 class="subtitle is-4 has-text-centered has-text-primary"> Here are your results! </h2>
+
+    <hr><br>
+
+    <div class="columns"> 
+      <div class="column is-four-fifths">
+        <h1 class="title is-3 has-text-primary">Chat Activity Over Dates: </h1>
+        {% autoescape off %}
+        {{ Activity }}
+        {% endautoescape %}
+      </div>
+    </div>
+
+    <div class="columns"> 
+      <div class="column is-four-fifths">
+        <h1 class="title is-3 has-text-primary">Most Used Words: </h1>
+        {% autoescape off %}
+        {{ MostUsedWords }}
+        {% endautoescape %}
+      </div>
+    </div>
+    
+    <div class="columns"> 
+      <div class="column is-four-fifths">
+        <h1 class="title is-3 has-text-primary">Most Active Members: </h1>
+        {% autoescape off %}
+        {{ MostActiveMembers }}
+        {% endautoescape %}
+      </div>
+    </div>
+
+    <div class="columns"> 
+      <div class="column is-four-fifths">
+        <h1 class="title is-3 has-text-primary">Most Sent Messages between 11pm and 3am: </h1>
+        {% autoescape off %}
+        {{ NightOwls }}
+        {% endautoescape %}
+      </div>
+    </div>
+
+    <div class="columns"> 
+      <div class="column is-four-fifths">
+        <h1 class="title is-3 has-text-primary">Most Sent Messages between 6am and 9am: </h1>
+        {% autoescape off %}
+        {{ EarlyBirds }}
+        {% endautoescape %}
+      </div>
+    </div>
+
+    <div class="columns"> 
+      <div class="column is-four-fifths">
+        <h1 class="title is-3 has-text-primary">Emoji Spammers: </h1>
+        {% autoescape off %}
+        {{ EmojiSpammers }}
+        {% endautoescape %}
+      </div>
+    </div>
+
+    <div class="columns"> 
+      <div class="column is-four-fifths">
+        <h1 class="title is-3 has-text-primary">Most Used Emojis: </h1>
+        {% autoescape off %}
+        {{ FrequentEmojis }}
+        {% endautoescape %}
+      </div>
+    </div>
+
+  </body>
+</html>

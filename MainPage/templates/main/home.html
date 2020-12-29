@@ -10,8 +10,6 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css">
     <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
     <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
-    <link rel="stylesheet" href="/static/portfolio/Home.css">
-    <link rel = "icon" href ="/static/portfolio/Favicon.png" type = "image">
 
     <title>Whatsapp Chat Analyzer</title>
   </head>
@@ -25,11 +23,11 @@
 
     <div class="columns is-centered">
     <div class="column is-half">
-      <form method="POST" enctype="multipart/form-data" action="{% url 'Analyze' %}">
+      <form method="post" enctype="multipart/form-data" action="{% url 'Analyze' %}">
         {% csrf_token %}
         <div class="file has-name is-fullwidth is-primary">
           <label class="file-label">
-            <input class="file-input" type="file" name="resume">
+            <input class="file-input" type="file" name="document">
             <span class="file-cta">
               <span class="file-icon">
                 <i class="fas fa-upload"></i>
@@ -45,7 +43,7 @@
         </div>
         <br><br>
         <div class="columns is-centered">
-          <input class="button is-rounded is-outlined is-primary" type="submit" value="Start Analysis">
+          <button class="button is-rounded is-outlined is-primary" type="submit">Analyze</button>
         </div>
       </form>
     </div>
