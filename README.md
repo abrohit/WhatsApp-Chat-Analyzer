@@ -14,4 +14,4 @@
 - Pandas
 - Django
 - HTML
-- CSS
+- CSS / Bulma

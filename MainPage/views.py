@@ -25,6 +25,10 @@ def Analyze(request):
 
         stats = StatGenerator(dataframe)
 
+        totalemojis = stats.TotalEmojis()
+        uniqueemojis = stats.UniqueEmojis()
+        totalmessages = stats.TotalMessages()
+
         activity = stats.ActivityOverDates()
         mostusedwords = stats.MostUsedWords(5)
         mostactivemembers = stats.MostActive(5)
@@ -33,8 +37,8 @@ def Analyze(request):
         emojispammers = stats.EmojiSpammers(5)
         frequentemojis = stats.FrequentEmojis(5)
 
-        html_data = {'Name': uploaded_file.name, 'Activity' : activity, 'MostUsedWords' : mostusedwords , 'MostActiveMembers' : mostactivemembers, 'NightOwls' : nightowls, 
-        'EarlyBirds' : earlybirds, 'EmojiSpammers' : emojispammers, 'FrequentEmojis' : frequentemojis}
+        html_data = {'Name': uploaded_file.name, 'TotalEmojis' : totalemojis, 'UniqueEmojis' : uniqueemojis, 'TotalMessages' : totalmessages,'Activity' : activity, 'MostUsedWords' : mostusedwords , 
+        'MostActiveMembers' : mostactivemembers, 'NightOwls' : nightowls, 'EarlyBirds' : earlybirds, 'EmojiSpammers' : emojispammers, 'FrequentEmojis' : frequentemojis}
 
         os.remove(file_path)
 

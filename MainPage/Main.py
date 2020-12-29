@@ -96,6 +96,10 @@ class StatGenerator:
 
     def __init__(self, dataframe):
         self.df = dataframe
+    
+    def TotalMessages(self):
+        result = self.df.shape[0]
+        return result
 
     def ActivityOverDates(self):
         result = self.df.groupby('Date').sum()
