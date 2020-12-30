@@ -7,17 +7,17 @@ from .Main import ExtractData, StatGenerator
 from .forms import DocumentForm
 
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))#gets base file path
 
 def Home(request):
     return(render(request, 'main/home.html'))
 
 def Analyze(request):
     if request.method == 'POST':
-        uploaded_file = request.FILES['document']
+        uploaded_file = request.FILES['document']#gets txt file uploaded from forms
         fs = FileSystemStorage()
-        name = fs.save(uploaded_file.name, uploaded_file)
-        file_path = BASE_DIR + '\media\\' + name
+        name = fs.save(uploaded_file.name, uploaded_file)#name of file
+        file_path = BASE_DIR + '\media\\' + name#filepath to extract data
 
         ed = ExtractData(file_path)
         ed.Main_Process()
@@ -40,7 +40,7 @@ def Analyze(request):
         html_data = {'Name': uploaded_file.name, 'TotalEmojis' : totalemojis, 'UniqueEmojis' : uniqueemojis, 'TotalMessages' : totalmessages,'Activity' : activity, 'MostUsedWords' : mostusedwords , 
         'MostActiveMembers' : mostactivemembers, 'NightOwls' : nightowls, 'EarlyBirds' : earlybirds, 'EmojiSpammers' : emojispammers, 'FrequentEmojis' : frequentemojis}
 
-        os.remove(file_path)
+        os.remove(file_path)#deletes file as soon as all data is processed.
 
         return(render(request, 'main/analyze.html', html_data))
     else:

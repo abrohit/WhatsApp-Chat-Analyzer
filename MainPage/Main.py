@@ -9,7 +9,7 @@ import plotly.express as px
 from plotly.offline import plot
 import plotly.graph_objects as go
 
-class ExtractData:
+class ExtractData:#class to extract data from txt file.
 
     def __init__(self, file_path):
         self.path = file_path
@@ -19,14 +19,14 @@ class ExtractData:
         file = open(self.path, 'r', encoding='utf-8')
         return file
 
-    def Is_NewEntry(self, line: str) -> bool:
+    def Is_NewEntry(self, line: str) -> bool:#Checks if the line in the txt file contains a new message.
         date_time = '([0-9]+)(\/)([0-9]+)(\/)([0-9]+), ([0-9]+):([0-9]+)[ ]?(AM|PM|am|pm)? -'
         test = re.match(date_time, line)
         if test is None:
             return False
         else:
             return True
-    def Seperate_Data(self, line: str) -> tuple:
+    def Seperate_Data(self, line: str) -> tuple:#Seperates the data on a line: date, time, author, and message.
 
         data = line.split(' - ')
         date, time = data[0].split(', ')
@@ -39,7 +39,7 @@ class ExtractData:
         else:
             return None
 
-    def Emojis_Check(self, message: str)-> list:
+    def Emojis_Check(self, message: str)-> list:#Returns the emojis in a message.
 
         final = []
         for char in message:
@@ -59,14 +59,14 @@ class ExtractData:
         author=''
 
         file = self.load_file()
-        file.readline() #skips the first line
+        file.readline() #Skips the first line.
 
         while True:
             line = file.readline()
             if not line:
-                break #Stops the while loop at the end of file
+                break #Stops the while loop at the end of file.
 
-            if self.Is_NewEntry(line):
+            if self.Is_NewEntry(line):#Checks if the new line is a new message.
 
                 if len(full_message)>0:
                     temp = ' '.join(full_message)
@@ -83,7 +83,7 @@ class ExtractData:
 
         file.close()
 
-    def Change_Dataframe(self) -> object:
+    def Change_Dataframe(self) -> object:#converts the data into pandas dataframe
 
         df = pd.DataFrame(self.data, columns=['Date', 'Time', 'Author', 'Message'])
         df['Date'] = pd.to_datetime(df.Date)
@@ -92,7 +92,7 @@ class ExtractData:
 
         return df
 
-class StatGenerator:
+class StatGenerator:#Generates stats when given a pandas dataframe of Whatsapp chats.
 
     def __init__(self, dataframe):
         self.df = dataframe
@@ -187,16 +187,3 @@ class StatGenerator:
         figure = go.Figure(data=[go.Pie(labels=labels, values=values)])
         graph = plot(figure, output_type='div')
         return graph
-
-def main():
-
-    file_store = 'D:\Desktop\Programming\Whatsapp_Analyzer\Test.txt'
-
-    yes = ExtractData(file_store)
-    yes.Main_Process()
-    df = yes.Change_Dataframe()
-
-    stat = StatGenerator(df)
-    print(stat.EmojiSpammers(5))
-
-#main()
