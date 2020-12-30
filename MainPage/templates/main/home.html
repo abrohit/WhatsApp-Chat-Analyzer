@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-
+  {% load static %}
 
   <head>
     <meta charset="utf-8">
@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css">
     <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
     <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'main/home.css' %}">
 
     <title>Whatsapp Chat Analyzer</title>
   </head>
@@ -22,12 +23,30 @@
     <br><br><br>
 
     <div class="columns is-centered">
+      <div class="column">
+        <button class="prev" onclick="plusDivs(-1)">&#10094;</button>
+      </div>
+
+      <div class="column is-three-quarters">
+        <img class="mySlides" src="{% static 'main/1.png' %}">
+        <img class="mySlides" src="{% static 'main/2.png' %}">
+        <img class="mySlides" src="{% static 'main/3.png' %}">
+      </div>
+
+      <div class="column">
+        <button class="next" onclick="plusDivs(+1)">&#10095;</button>
+      </div>    
+    </div>
+
+    <br><br>
+
+    <div class="columns is-centered">
     <div class="column is-half">
       <form method="post" enctype="multipart/form-data" action="{% url 'Analyze' %}">
         {% csrf_token %}
-        <div class="file has-name is-fullwidth is-primary">
+        <div id="file-js-example" class="file has-name is-primary is-fullwidth">
           <label class="file-label">
-            <input class="file-input" type="file" name="document">
+            <input class="file-input" type="file" name="document" accept=".txt">
             <span class="file-cta">
               <span class="file-icon">
                 <i class="fas fa-upload"></i>
@@ -37,10 +56,10 @@
               </span>
             </span>
             <span class="file-name">
-              No File Chosen
+              No file uploaded
             </span>
           </label>
-        </div>
+        </div>        
         <br><br>
         <div class="columns is-centered">
           <button class="button is-rounded is-outlined is-primary" type="submit">Analyze</button>
@@ -50,4 +69,33 @@
   </div>
 <br>
 </body>
+
+<script>
+  const fileInput = document.querySelector('#file-js-example input[type=file]');
+  fileInput.onchange = () => {
+    if (fileInput.files.length > 0) {
+      const fileName = document.querySelector('#file-js-example .file-name');
+      fileName.textContent = fileInput.files[0].name;
+    }
+  }
+
+  var slideIndex = 1;
+showDivs(slideIndex);
+
+function plusDivs(n) {
+  showDivs(slideIndex += n);
+}
+
+function showDivs(n) {
+  var i;
+  var x = document.getElementsByClassName("mySlides");
+  if (n > x.length) {slideIndex = 1}
+  if (n < 1) {slideIndex = x.length} ;
+  for (i = 0; i < x.length; i++) {
+    x[i].style.display = "none";
+  }
+  x[slideIndex-1].style.display = "block";
+}
+</script>
+
 </html>
