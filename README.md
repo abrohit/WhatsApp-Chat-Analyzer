@@ -28,6 +28,8 @@ This web application analyzes your Whatsapp group chats and provides statistics 
 
 ## Behind the Project
 
+The file ```MainPage/Main.py``` analyzes the Whatsapp group chats. The ```ExtractData()``` class extracts the data and outputs the extracted data in pandas dataframe. The ```StatGenerator()``` class analyzes the data and creates a bar graph or pie graph using plotly. The web application is made with Django Framework. 
+
 ## Screenshots
 ![pic1](./MainPage/static/main/1.png)
 
