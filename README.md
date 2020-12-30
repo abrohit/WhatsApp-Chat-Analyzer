@@ -7,6 +7,7 @@
 ## Table of Contents
 * [About the Project](#about-the-project)
 * [Tech Stack](#tech-stack)
+* [Behind the Project](#behind-the-project)
 * [Screenshots](#screenshots)
 * [Contact](#contact)
 
@@ -24,6 +25,8 @@ This web application analyzes your Whatsapp group chats and provides statistics 
 - Django
 - HTML
 - CSS / Bulma
+
+## Behind the Project
 
 ## Screenshots
 ![pic1](./MainPage/static/main/1.png)
